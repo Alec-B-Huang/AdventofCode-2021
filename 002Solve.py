@@ -1,4 +1,4 @@
-file = open('C:\\AlecData\\002.txt', 'r')
+file = open('INSERT FILE PATH', 'r')
 data = file.read()
 
 Horizontal = 0
