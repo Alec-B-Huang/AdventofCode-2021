@@ -1,0 +1,86 @@
+import numpy 
+
+with open('c:\\test.txt') as f:
+    Boards = [line.rstrip('\n') for line in f]
+
+WinningNums = Boards[0]
+del Boards[0]
+while (' ' in Boards):
+    Boards.remove(' ')
+
+
+WinningNums = WinningNums.split(',')
+MapInts = map(int, WinningNums)
+ListOfNums = list(MapInts)
+print(ListOfNums)
+
+listofboards = []
+Iterations = 0
+board = []
+while Iterations != len(Boards):
+    for x in range(len(Boards)):
+        if len(board) == 5:
+            break
+        else:
+            BoardLine = Boards[x].split()
+            FormattedLine = list(map(int, BoardLine))
+            board.append(FormattedLine)
+            
+    
+        Iterations += 1
+        if Iterations % 5 == 0:
+            listofboards.append(board)
+            board = []
+
+
+
+
+def checkifNumInBoard(num):
+
+    for x in range(len(listofboards)):
+        for y in range(len(listofboards[x])):
+            for z in range(len(listofboards[x][y])):
+                if listofboards[x][y][z] == num:
+                    listofboards[x][y][z] = 0
+
+                
+    return listofboards
+
+def hasWon():
+    TransposeCombinedSum = 0
+    CombinedSum = 0
+
+    transposed = numpy.swapaxes(listofboards, 1, 2)
+    for x in range(len(listofboards)):
+
+        for y in range(len(listofboards[x])):
+            rowSum = sum(listofboards[x][y])
+            colSum = sum(transposed[x][y])
+            if rowSum == 0:
+                
+                for z in range(5):  
+                    CombinedSum += sum(listofboards[x][z])
+                    
+                return CombinedSum
+
+            elif colSum == 0:
+                
+                for z in range(5):
+                    TransposeCombinedSum += sum(transposed[x][z])    
+
+                return TransposeCombinedSum
+         
+finalSum = 0
+hasWon()
+for x in range(len(ListOfNums)):
+    currentNum = ListOfNums[x]
+    checkifNumInBoard(currentNum)
+    Var = hasWon()
+    IsInt = isinstance(Var, numpy.int32)
+    if IsInt == True:
+        print(Var)
+        print(ListOfNums[x])
+        finalSum = Var * ListOfNums[x]
+        break
+
+print(finalSum)
